@@ -1,0 +1,110 @@
+﻿@model List<Booking_Halls.Core.Entities.Booking>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои записи</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow-x: auto; /* Добавляет прокрутку на мобильных */
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Адаптация под мобильные */
+        @@media (max-width: 576px) {
+            th, td {
+                font-size: 14px;
+                padding: 6px;
+                white-space: nowrap; /* Предотвращает перенос текста */
+            }
+            .btn-sm {
+                font-size: 12px;
+                padding: 3px 5px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Мои записи</h1>
+
+        @if (Model != null && Model.Any())  
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Зал</th>
+                            <th>На имя</th>
+                            <th>Начало</th>
+                            <th>Оконч.</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model)
+                        {
+                            <tr>
+                                <td>@(booking.Hall?.Name ?? "Неизвестно")</td>
+                                <td>@(booking.UserName ?? "Аноним")</td>
+                                <td>@booking.StartTime.ToString("g")</td>
+                                <td>@booking.EndTime.ToString("g")</td>
+                                <td>
+                                    <form method="post" action="@Url.Action("DeleteBooking", "Booking")">
+                                        <input type="hidden" name="bookingId" value="@booking.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Удалить запись?');">
+                                            ❌ Удалить
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+                У вас пока нет записей.
+            </div>
+        }
+
+        <div class="btn-container">
+            <button class="btn btn-secondary" onclick="history.back()">Назад</button>
+        </div>
+    </div>
+
+</body>
+</html>

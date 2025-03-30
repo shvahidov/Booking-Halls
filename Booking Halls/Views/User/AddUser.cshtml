@@ -1,0 +1,76 @@
+﻿@model Booking_Halls.Core.Entities.User
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление пользователя</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form asp-action="AddUser" method="post">
+        <div class="container">
+            <h2>Добавление пользователя</h2>
+
+            <div class="user-info">
+                <label for="Name">Имя</label>
+                <input type="text" id="Name" name="Name" class="form-control" required />
+            </div>
+
+            <div class="user-info">
+                <label for="Age">Возраст</label>
+                <input type="number" id="Age" name="Age" class="form-control" required />
+            </div>
+
+            <div class="user-info">
+                <label for="Email">Email</label>
+                <input type="email" id="Email" name="Email" class="form-control" required />
+            </div>
+
+            <div class="user-info">
+                <label for="Password">Пароль</label>
+                <input type="password" id="Password" name="Password" class="form-control" required />
+            </div>
+
+            <div class="user-info">
+                <label asp-for="Role" class="form-label">Роль</label>
+                <select name="Role" class="form-select">
+                    <option value="User">Пользователь</option>
+                </select>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Добавить пользователя</button>
+                <a href="@Url.Action("ListUser", "User")" class="btn btn-secondary">Назад</a>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

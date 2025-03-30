@@ -1,0 +1,65 @@
+﻿@using Booking_Halls.Application.DTOs
+@model LoginRequestDto
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 15px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="login-container">
+            <h2>Вход</h2>
+
+            <form method="post" action="/login">
+                <div class="mb-3 text-start">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="Email" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Войти</button>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary w-100 mt-3">Назад</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

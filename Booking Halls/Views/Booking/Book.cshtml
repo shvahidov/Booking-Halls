@@ -1,0 +1,89 @@
+﻿@model Booking_Halls.Core.Entities.Booking
+@{
+    ViewBag.Title = "Бронирование";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование зала</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Бронирование зала</h2>
+
+        <!-- Показываем ошибки -->
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+
+        <form method="post" action="@Url.Action("Book", "Booking")">
+            <input type="hidden" name="hallId" value="@ViewBag.HallId" />
+
+            <div class="form-group">
+                <label for="userName" class="form-label">Имя:</label>
+                <input type="text" class="form-control" id="userName" name="userName" required />
+            </div>
+
+            <div class="form-group">
+                <label for="startTime" class="form-label">Начало:</label>
+                <input type="datetime-local" class="form-control" id="startTime" name="startTime" required />
+            </div>
+
+            <div class="form-group">
+                <label for="endTime" class="form-label">Окончание:</label>
+                <input type="datetime-local" class="form-control" id="endTime" name="endTime" required />
+            </div>
+
+            <div class="btn-container">
+                <a href="@Url.Action("HallDetails", "Booking", new { id = ViewBag.HallId })" class="btn btn-secondary">Назад</a>
+                <button type="submit" class="btn btn-success">Забронировать</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
