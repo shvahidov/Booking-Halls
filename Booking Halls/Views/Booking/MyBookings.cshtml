@@ -77,8 +77,8 @@
                             <tr>
                                 <td>@(booking.Hall?.Name ?? "Неизвестно")</td>
                                 <td>@(booking.UserName ?? "Аноним")</td>
-                                <td>@booking.StartTime.ToString("g")</td>
-                                <td>@booking.EndTime.ToString("g")</td>
+                                <td>@booking.StartTime.ToLocalTime().ToString("g")</td>
+                                <td>@booking.EndTime.ToLocalTime().ToString("g")</td>
                                 <td>
                                     <form method="post" action="@Url.Action("DeleteBooking", "Booking")">
                                         <input type="hidden" name="bookingId" value="@booking.Id" />

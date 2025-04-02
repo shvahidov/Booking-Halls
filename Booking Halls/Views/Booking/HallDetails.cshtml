@@ -101,8 +101,8 @@
                         {
                             <tr>
                                 <td>@(booking.UserName ?? "Неизвестный")</td>
-                                <td>@booking.StartTime.ToString("g")</td>
-                                <td>@booking.EndTime.ToString("g")</td>
+                                <td>@booking.StartTime.ToLocalTime().ToString("g")</td>
+                                <td>@booking.EndTime.ToLocalTime().ToString("g")</td>
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <td>
