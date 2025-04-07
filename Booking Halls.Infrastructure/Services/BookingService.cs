@@ -25,9 +25,6 @@ namespace Booking_Halls.Infrastructure.Services
 
         public async Task<List<Booking>> GetBookingsByHallAsync(int hallId)
         {
-            // Удаляем просроченные бронирования перед получением списка
-            await RemoveExpiredBookingsAsync();
-
             var bookings = await _context.Bookings
                 .Where(b => b.HallId == hallId)
                 .ToListAsync();
@@ -120,9 +117,6 @@ namespace Booking_Halls.Infrastructure.Services
 
         public async Task<List<Booking>> GetUserBookingsAsync(int userId)
         {
-            // Удаляем просроченные бронирования перед возвратом списка
-            await RemoveExpiredBookingsAsync();
-
             return await _context.Bookings
                 .Include(b => b.Hall)
                 .Where(b => b.UserId == userId)
@@ -130,9 +124,7 @@ namespace Booking_Halls.Infrastructure.Services
                 .ToListAsync();
         }
 
-        /// <summary>
-        /// Удаляет просроченные бронирования, у которых EndTime уже прошло.
-        /// </summary>
+        //Удаляет просроченные бронирования, у которых EndTime уже прошло.
         public async Task RemoveExpiredBookingsAsync()
         {
             var now = DateTime.UtcNow;
@@ -164,21 +156,6 @@ namespace Booking_Halls.Infrastructure.Services
             await _context.SaveChangesAsync();
             return "success";
         }
-
-        
-        //public async Task<string> DeleteBooking(int bookingId)
-        //{
-        //    var booking = await _context.Bookings.FindAsync(bookingId);
-        //    if (booking == null)
-        //    {
-        //        return "Бронирование не найдено.";
-        //    }
-
-        //    _context.Bookings.Remove(booking);
-        //    await _context.SaveChangesAsync();
-
-        //    return "success";
-        //}
 
         public async Task<string> DeleteAdminBookingAsync(int bookingId)
         {

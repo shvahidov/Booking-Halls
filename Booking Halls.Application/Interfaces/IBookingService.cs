@@ -17,6 +17,8 @@ namespace Booking_Halls.Application.Interfaces
         Task<List<Booking>> GetUserBookingsAsync(int userId);
         Task<string> DeleteBookingAsync(int bookingId, int userId);
         Task<string> DeleteAdminBookingAsync(int bookingId);
+        Task RemoveExpiredBookingsAsync();
+
     }
 
 

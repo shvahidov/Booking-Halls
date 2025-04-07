@@ -2,7 +2,10 @@
 using Booking_Halls.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-
+using Hangfire;
+using Hangfire.PostgreSql;
+using Booking_Halls.Application.Interfaces;
+using Booking_Halls.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +15,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/login"; 
-        options.AccessDeniedPath = "/access-denied"; 
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/access-denied";
     });
 
 builder.Services.AddAuthorization(options =>
@@ -24,28 +27,31 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddControllersWithViews();
 
+
+// 🔸 Добавляем Hangfire + PostgreSQL storage
+builder.Services.AddHangfire(config =>
+{
+    config.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddHangfireServer();
+
+
 var app = builder.Build();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+// 🔸 Панель мониторинга Hangfire по адресу /hangfire
+app.UseHangfireDashboard("/hangfire");
 
-    endpoints.MapControllerRoute(
-        name: "login",
-        pattern: "{controller=Login}/{action=Login}/{id?}");
+// 🔹 Повторяющаяся задача: удаление просроченных бронирований каждые 5 минут
+RecurringJob.AddOrUpdate<IBookingService>(
+    "remove-expired-bookings",
+    x => x.RemoveExpiredBookingsAsync(),
+    Cron.MinuteInterval(5));
 
-    endpoints.MapControllerRoute(
-        name: "register",
-        pattern: "{controller=Register}/{action=Register}/{id?}");
-    endpoints.MapControllerRoute(
-        name: "admin",
-        pattern: "{controller=Admin}/{action=Index}/{id?}");
-});
+app.UseEndpoints(EndpointConfig.RegisterRoutes);
+
 
 app.Run();
